@@ -12,6 +12,7 @@ import io.restassured.specification.RequestSpecification;
 import model.Category;
 import model.Pet;
 import model.Tag;
+import stepdefs.World;
 
 public class PetEndpoint extends BaseEndpoints {
 	private final String PET_ENDPOINT_PATH = "pet/";
@@ -33,6 +34,12 @@ public class PetEndpoint extends BaseEndpoints {
 	public Response addPetWithNoPostBody(RequestSpecification request) {
 		request.body("{");
 		return request.post(getBaseUrl() + this.getPath());
+	}
+	
+	public void addPet(World world, Pet pet) {
+		world.setPet(pet);
+		world.setRequest(getRequestWithJSONHeaders());
+		world.setResponse(addPet(world.getRequest(), pet));
 	}
 
 	public Response addPet(RequestSpecification request) {

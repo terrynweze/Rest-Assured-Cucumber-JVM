@@ -50,36 +50,27 @@ public class PetEndpointStepDefinitions {
 
 	@Given("^a cat is '(.*?)'$")
 	public void a_cat_is_availablilability(String availability) {
-		Pet cat = petEndpoint.createPet(16, "7:feline", "Pussy Cat", "image1:image2", "17:Furry", availability);
-		world.setPet(cat);
-		world.setRequest(petEndpoint.getRequestWithJSONHeaders());
-		world.setResponse(petEndpoint.addPet(world.getRequest(), cat));
+		petEndpoint.addPet(world,
+				petEndpoint.createPet(16, "7:feline", "Pussy Cat", "image1:image2", "17:Furry", availability));
 	}
-	
+
 	@Then("^I can add a pet that has multiple tags$")
 	public void i_can_add_a_pet_that_has_multiple_tags() {
 		Pet pet = petEndpoint.createPet(16, "45:rodent", "Rat", "image1", "17:Furry,29:cute,33:Small", "available");
-		world.setPet(pet);
-		world.setRequest(petEndpoint.getRequestWithJSONHeaders());
-		world.setResponse(petEndpoint.addPet(world.getRequest(), pet));
+		petEndpoint.addPet(world, pet);
 		petEndpoint.verifyResponseStatusValue(world.getResponse(), PetEndpoint.SUCCESS_STATUS_CODE);
 	}
 
 	@Then("^I can add a pet that has no tags$")
 	public void i_can_add_a_pet_that_has_no_tags() {
-		Pet pet = petEndpoint.createPet(16, "45:rodent", "Rat", "image1", "", "available");
-		world.setPet(pet);
-		world.setRequest(petEndpoint.getRequestWithJSONHeaders());
-		world.setResponse(petEndpoint.addPet(world.getRequest(), pet));
+		petEndpoint.addPet(world, petEndpoint.createPet(16, "45:rodent", "Rat", "image1", "", "available"));
 		petEndpoint.verifyResponseStatusValue(world.getResponse(), PetEndpoint.SUCCESS_STATUS_CODE);
 	}
 
 	@When("^I add a pet to the system without providing an id value$")
 	public void i_add_a_pet_to_the_system_without_providing_an_id_value() {
-		Pet pet = petEndpoint.createPet(null, "45:rodent", "Rat", "image1", "17:Furry,29:cute,33:Small", "available");
-		world.setPet(pet);
-		world.setRequest(petEndpoint.getRequestWithJSONHeaders());
-		world.setResponse(petEndpoint.addPet(world.getRequest(), pet));
+		petEndpoint.addPet(world,
+				petEndpoint.createPet(null, "45:rodent", "Rat", "image1", "17:Furry,29:cute,33:Small", "available"));
 	}
 
 	@Then("^an id is automatically generated for the added pet$")

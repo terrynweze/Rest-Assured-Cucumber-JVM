@@ -1,4 +1,5 @@
 Feature: Order Tests
+	This feature includes tests that test the store order RESTFul services
 
 @smokeTest
 Scenario: Correct error message is provided when searching for an order that does not exist 
@@ -14,7 +15,7 @@ Scenario: Users are able to place orders for pets
     And the order requests response contains the correct json data
 
 @smokeTest
-Scenario: Users are able to place orders for pets
+Scenario: Users are able to search for orders by its id
 		Given an order exists for a pet
 		When I search for the order by its id
 		Then the complete order is returned

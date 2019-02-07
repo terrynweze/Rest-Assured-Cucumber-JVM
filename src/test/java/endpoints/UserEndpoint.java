@@ -24,30 +24,6 @@ public class UserEndpoint extends BaseEndpoints {
 		return this.defaultUser;
 	}
 	
-	public Response submitLogin(RequestSpecification request, String validity) {
-		
-		if("valid".equalsIgnoreCase(validity)) {
-			return submitLogin(request, getDefaultUser(), true);
-		}
-		
-		return submitLogin(request, getDefaultUser(), false);
-	}
-	
-	public Response submitLogin(RequestSpecification request, User user, boolean validUser) {
-//		request.param("username", user.getUsername());
-//		request.param("password", user.getPassword());
-		
-		
-		//RestAssured.baseURI = getBaseUrl() + this.getPath();
-		return RestAssured.given().urlEncodingEnabled(true)
-            .param("username", user.getUsername())
-            .param("password", user.getPassword())
-            .header("Content-Type", "application/xml")
-            .get(getBaseUrl() + this.getPath());
-            
-		//return request.get(getBaseUrl() + this.getPath());
-	}
-	
 	public Response getUserByUsername() {
 		return getUserByUsername(getDefaultUser().getUsername());
 	}

@@ -1,4 +1,5 @@
 Feature: Pet Tests
+This feature includes tests that test the pet RESTFul services
 
 @smokeTest
 Scenario: Users are able to add pets to the system
