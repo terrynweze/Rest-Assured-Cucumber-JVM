@@ -35,7 +35,7 @@ Scenario: Id's are automatically generated for pets when not supplied with the r
 @smokeTest
 Scenario: Adding a pet with no body for the request results in a 400 response
     Given the Swagger Petstore API is available
-    When I add a pet and the json body is mailformed
+    When I add a pet and the json body is malformed and consists of only '{'
     Then the pet request response has a '400' response code
     Then the requests response will contain the value 'bad input' for the 'message' field
 

@@ -31,9 +31,14 @@ public class PetEndpoint extends BaseEndpoints {
 		return this.defaultPet;
 	}
 
-	public Response addPetWithNoPostBody(RequestSpecification request) {
-		request.body("{");
+	public Response addPetWithBody(RequestSpecification request, String body) {
+		request.body(body);
 		return request.post(getBaseUrl() + this.getPath());
+	}
+	
+	public void addPet(World world) {
+		world.setRequest(getRequestWithJSONHeaders());
+		world.setResponse(addPet(world.getRequest()));
 	}
 	
 	public void addPet(World world, Pet pet) {
@@ -152,7 +157,8 @@ public class PetEndpoint extends BaseEndpoints {
 	public void verifyPetHasAnId(Response response) {
 		String idVal = response.jsonPath().getString("id");
 		verifyTrue(idVal != null);
-		verifyTrue(idVal.length() > 0);
+		verifyTrue(!idVal.equalsIgnoreCase(""));
+		verifyTrue(Long.parseLong(idVal) > 0);
 	}
 
 	public Pet createPet(Integer id, Category category, String name, String[] photoUrls, Tag[] tags, String status) {

@@ -17,8 +17,7 @@ public class PetEndpointStepDefinitions {
 
 	@When("^I add a Pet to the system$")
 	public void i_add_a__pet_to_the_system() {
-		world.setRequest(petEndpoint.getRequestWithJSONHeaders());
-		world.setResponse(petEndpoint.addPet(world.getRequest()));
+		petEndpoint.addPet(world);
 	}
 
 	@Then("^the pet request response has a '(\\d+)' response code$")
@@ -33,8 +32,7 @@ public class PetEndpointStepDefinitions {
 
 	@Given("^a pet exists$")
 	public void a_pet_exists() {
-		world.setRequest(petEndpoint.getRequestWithJSONHeaders());
-		world.setResponse(petEndpoint.addPet(world.getRequest()));
+		petEndpoint.addPet(world);
 		petEndpoint.verifyResponseStatusValue(world.getResponse(), PetEndpoint.SUCCESS_STATUS_CODE);
 	}
 
@@ -56,8 +54,7 @@ public class PetEndpointStepDefinitions {
 
 	@Then("^I can add a pet that has multiple tags$")
 	public void i_can_add_a_pet_that_has_multiple_tags() {
-		Pet pet = petEndpoint.createPet(16, "45:rodent", "Rat", "image1", "17:Furry,29:cute,33:Small", "available");
-		petEndpoint.addPet(world, pet);
+		petEndpoint.addPet(world, petEndpoint.createPet(16, "45:rodent", "Rat", "image1", "17:Furry,29:cute,33:Small", "available"));
 		petEndpoint.verifyResponseStatusValue(world.getResponse(), PetEndpoint.SUCCESS_STATUS_CODE);
 	}
 
@@ -78,10 +75,10 @@ public class PetEndpointStepDefinitions {
 		petEndpoint.verifyPetHasAnId(world.getResponse());
 	}
 
-	@When("^I add a pet and the json body is mailformed$")
-	public void i_add_a_pet_and_the_json_body_is_mailformed() {
+	@When("^I add a pet and the json body is malformed and consists of only '(.*?)'$")
+	public void i_add_a_pet_and_the_json_body_is_malformed(String body) {
 		world.setRequest(petEndpoint.getRequestWithJSONHeaders());
-		world.setResponse(petEndpoint.addPetWithNoPostBody(world.getRequest()));
+		world.setResponse(petEndpoint.addPetWithBody(world.getRequest(), body));
 	}
 
 }
