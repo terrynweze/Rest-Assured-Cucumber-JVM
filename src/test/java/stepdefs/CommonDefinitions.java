@@ -16,7 +16,8 @@ public class CommonDefinitions {
 	
 	@Given("^the Swagger Petstore API is available$") 
 	public void the_swagger_petstore_api_is_available() {
-		RestAssured.given().when().get(be.getBaseUrl() + "swagger.json").then().statusCode(200);
+		String url = be.getBaseUrl() + "swagger.json";
+		be.sendRequest(null, BaseEndpoints.GET_REQUEST, url, null).then().statusCode(200);
 	}
 	
 	@Then("^the requests response will contain the value '(.*?)' for the '(.*?)' field$")
