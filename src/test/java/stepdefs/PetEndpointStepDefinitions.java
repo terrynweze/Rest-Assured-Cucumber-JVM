@@ -43,31 +43,31 @@ public class PetEndpointStepDefinitions {
 
 	@When("^then search for the pet by it's id$")
 	public void then_search_for_the_pet_by_its_id() {
-		world.setResponse(petEndpoint.getPetById());
+		world.setResponse(petEndpoint.getPetById(world.getRequest()));
 	}
 
 	@Given("^a cat is '(.*?)'$")
 	public void a_cat_is_availablilability(String availability) {
 		petEndpoint.addPet(world,
-				petEndpoint.createPet(16, "7:feline", "Pussy Cat", "image1:image2", "17:Furry", availability));
+				new Pet(16, "7:feline", "Pussy Cat", "image1:image2", "17:Furry", availability));
 	}
 
 	@Then("^I can add a pet that has multiple tags$")
 	public void i_can_add_a_pet_that_has_multiple_tags() {
-		petEndpoint.addPet(world, petEndpoint.createPet(16, "45:rodent", "Rat", "image1", "17:Furry,29:cute,33:Small", "available"));
+		petEndpoint.addPet(world, new Pet(16, "45:rodent", "Rat", "image1", "17:Furry,29:cute,33:Small", "available"));
 		petEndpoint.verifyResponseStatusValue(world.getResponse(), PetEndpoint.SUCCESS_STATUS_CODE);
 	}
 
 	@Then("^I can add a pet that has no tags$")
 	public void i_can_add_a_pet_that_has_no_tags() {
-		petEndpoint.addPet(world, petEndpoint.createPet(16, "45:rodent", "Rat", "image1", "", "available"));
+		petEndpoint.addPet(world, new Pet(16, "45:rodent", "Rat", "image1", "", "available"));
 		petEndpoint.verifyResponseStatusValue(world.getResponse(), PetEndpoint.SUCCESS_STATUS_CODE);
 	}
 
 	@When("^I add a pet to the system without providing an id value$")
 	public void i_add_a_pet_to_the_system_without_providing_an_id_value() {
 		petEndpoint.addPet(world,
-				petEndpoint.createPet(null, "45:rodent", "Rat", "image1", "17:Furry,29:cute,33:Small", "available"));
+				new Pet(null, "45:rodent", "Rat", "image1", "17:Furry,29:cute,33:Small", "available"));
 	}
 
 	@Then("^an id is automatically generated for the added pet$")

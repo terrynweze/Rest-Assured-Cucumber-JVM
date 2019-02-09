@@ -23,7 +23,7 @@ public class UserEndpointStepDefinitions {
 	
 	@When("I search for the user by their username$")
 	public void i_search_for_the_user_by_their_username() {
-		world.setResponse(userEndpoint.getUserByUsername());
+		world.setResponse(userEndpoint.getUserByUsername(world.getRequest()));
 	}
 	
     @Then("the user is located$")

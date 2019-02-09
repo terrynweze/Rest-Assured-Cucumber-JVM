@@ -1,5 +1,9 @@
 package model;
 
+import java.util.ArrayList;
+
+import org.apache.commons.lang3.tuple.Pair;
+
 public class Pet {
 	private Integer id;
 	private Category category;
@@ -23,6 +27,40 @@ public class Pet {
 		setName(name);
 		setPhotoUrls(photoUrls);
 		setTag(tags);
+		setStatus(status);
+	}
+	
+	public Pet(Integer id, String categoryString, String name, String photoUrlsString, String tagsString,
+			String status) {
+		String[] categoryStringArray = categoryString.split(":");
+
+		Pair<String, String> category = Pair.of(categoryStringArray[0], categoryStringArray[1]);
+
+		String[] photoUrlsArray = photoUrlsString.split(":");
+
+		ArrayList<Pair<Integer, String>> tagsList = new ArrayList<Pair<Integer, String>>();
+
+		if (!"".equalsIgnoreCase(tagsString)) {
+			String[] tagStringArray = tagsString.split(",");
+			for (int i = 0; i < tagStringArray.length; i++) {
+				String[] tagArray = tagStringArray[i].split(":");
+				tagsList.add(Pair.of(Integer.parseInt(tagArray[0]), tagArray[1]));
+			}
+		}
+		
+		Category cat = new Category(Integer.parseInt(category.getKey()), category.getValue());
+
+		Tag[] tagArray = new Tag[tagsList.size()];
+		for (int i = 0; i < tagsList.size(); i++) {
+			Pair<Integer, String> p = tagsList.get(i);
+			tagArray[i] = new Tag(p.getKey(), p.getValue());
+		}
+		
+		setId(id);
+		setCategory(cat);
+		setName(name);
+		setPhotoUrls(photoUrlsArray);
+		setTag(tagArray);
 		setStatus(status);
 	}
 	
@@ -73,6 +111,5 @@ public class Pet {
 	public String getStatus() {
 		return this.status;
 	}
-		
 
 }

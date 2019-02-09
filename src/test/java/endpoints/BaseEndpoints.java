@@ -8,12 +8,19 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Map;
 
+import org.json.JSONObject;
+
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import model.Order;
 
 public class BaseEndpoints {
 	public static final int SUCCESS_STATUS_CODE = 200;
+	
+	public static final int GET_REQUEST = 0;
+	public static final int POST_REQUEST = 1;
+	public static final int DELETE_REQUEST = 2;
 	
 	protected final String base_url = "https://petstore.swagger.io/v2/";
 	
@@ -59,8 +66,6 @@ public class BaseEndpoints {
 		}
 	}
 	
-	
-	
 	public void verifyNestedArrayMapResponseKeyValues(String nestTedCompnent, String key, String[] val, Response r) {
 		ArrayList<Object> nestedArray = (ArrayList<Object>) r.jsonPath().getList(nestTedCompnent);
 		
@@ -84,5 +89,38 @@ public class BaseEndpoints {
 		return r;
 	}
 	
-
+	protected JSONObject createJSONPayload(Object pojo) {
+		return new JSONObject( pojo );
+	}
+	
+	public Response sendRequest(RequestSpecification request, int requestType, String url, Object pojo) {
+		Response response = null;
+		
+		// Add the Json to the body of the request
+		if (null != pojo) {
+			String payload = createJSONPayload(pojo).toString();
+			request.body(payload);
+		}
+		
+		// need to add a switch based on request type
+		switch (requestType) {
+        case BaseEndpoints.GET_REQUEST:  
+        	if(null == request) {
+        		response = RestAssured.when().get(url);
+        	} else {
+        		response = request.get(url);
+        	}
+            break;
+        case BaseEndpoints.POST_REQUEST:  
+        	response = request.post(url);
+            break;
+        case BaseEndpoints.DELETE_REQUEST: 
+        	response = request.delete(url);
+        	break;
+       default: 
+    	   response = request.post(url);
+           break;
+    }
+		return response;
+	}
 }

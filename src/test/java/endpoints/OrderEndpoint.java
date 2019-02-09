@@ -2,9 +2,6 @@ package endpoints;
 
 
 
-import org.json.JSONObject;
-
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import model.Order;
@@ -23,8 +20,9 @@ public class OrderEndpoint extends BaseEndpoints{
 		return this.ORDER_ENDPOINT_PATH;
 	}
 	
-	public Response getOrderById(String id) {
-		return RestAssured.when().get(getBaseUrl() + this.getPath() + id);
+	public Response getOrderById(RequestSpecification request, String id) {
+		String url = getBaseUrl() + this.getPath() + id;
+		return sendRequest(request, BaseEndpoints.GET_REQUEST, url, null);
 	}
 	
 	public Response placeOrder(RequestSpecification request) {
@@ -33,36 +31,9 @@ public class OrderEndpoint extends BaseEndpoints{
 				defaultOrder);
 	}
 	
-	public Response placeOrder(RequestSpecification request,Order order) {
-		return placeOrder(
-				request,
-				order.getId(),
-				order.getPetId(),
-				order.getQuantity(),
-				order.getShipDate(),
-				order.getStatus(),
-				order.getComplete());
-	}
-	
-	public Response placeOrder(RequestSpecification request, Integer orderId, int petID, int quantity, String shipDate, String status, boolean complete) {
-		JSONObject requestParams = createOrderRequestJSONBody(orderId, petID, quantity, shipDate, status, complete);
-				
-		// Add the Json to the body of the request
-		request.body(requestParams.toString());
-		
-		return request.post(getBaseUrl() + this.getPath());
-	}
-	
-	private JSONObject createOrderRequestJSONBody(Integer orderId, int petID, int quantity, String shipDate, String status, boolean complete) {
-		JSONObject requestParams = new JSONObject();
-		requestParams.put("id", orderId); 
-		requestParams.put("petId", petID); 
-		requestParams.put("quantity", quantity);
-		requestParams.put("shipDate", shipDate);
-		requestParams.put("status",  status);
-		requestParams.put("complete",  complete);
-		
-		return requestParams;
+	public Response placeOrder(RequestSpecification request, Order order) {
+		String url = getBaseUrl() + this.getPath();
+		return sendRequest(request, BaseEndpoints.POST_REQUEST, url, order);
 	}
 	
 	public Order getDefaultOrder() {
